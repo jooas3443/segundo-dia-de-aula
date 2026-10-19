@@ -1,0 +1,533 @@
+# ==========================================
+# 🚛 SISTEMA DE CONTROLE DE FROTA
+# ==========================================
+ 
+frota = []
+ 
+ 
+# ==========================================
+# FUNÇÃO PARA NORMALIZAR TEXTO
+# ==========================================
+ 
+def normalizar(texto):
+    return texto.strip().lower()
+ 
+ 
+# ==========================================
+# FUNÇÃO PARA NORMALIZAR ESTADO
+# ==========================================
+ 
+def normalizar_estado(estado):
+ 
+    estado = estado.strip().lower()
+ 
+    estados = {
+        "são paulo": "SP",
+        "sao paulo": "SP",
+        "sp": "SP",
+ 
+        "paraná": "PR",
+        "parana": "PR",
+        "pr": "PR",
+ 
+        "minas gerais": "MG",
+        "mg": "MG",
+ 
+        "rio de janeiro": "RJ",
+        "rj": "RJ",
+ 
+        "santa catarina": "SC",
+        "sc": "SC",
+ 
+        "rio grande do sul": "RS",
+        "rs": "RS",
+ 
+        "bahia": "BA",
+        "ba": "BA",
+ 
+        "goiás": "GO",
+        "goias": "GO",
+        "go": "GO"
+    }
+ 
+    if estado in estados:
+        return estados[estado]
+ 
+    return estado.upper()
+ 
+ 
+# ==========================================
+# FUNÇÃO PARA LER UM ANO
+# ==========================================
+ 
+def ler_ano():
+ 
+    while True:
+ 
+        try:
+            ano = int(input("Ano do caminhão: "))
+ 
+            if ano <= 0:
+                print("Digite um ano válido!")
+            else:
+                return ano
+ 
+        except ValueError:
+            print("Digite apenas números para o ano!")
+ 
+ 
+# ==========================================
+# CADASTRAR CAMINHÃO
+# ==========================================
+ 
+def cadastrar_caminhao():
+ 
+    print("\n========== CADASTRAR CAMINHÃO ==========")
+ 
+    placa = input("Placa: ")
+    modelo = input("Modelo: ")
+    motorista = input("Motorista: ")
+    cidade = input("Cidade: ")
+    estado = input("Estado: ")
+    carga = input("Tipo de carga: ")
+ 
+    # NOVO:
+    # Agora o ano é lido através da função
+    # que possui try/except.
+    ano = ler_ano()
+ 
+    placa = normalizar(placa)
+    modelo = normalizar(modelo)
+    motorista = normalizar(motorista)
+    cidade = normalizar(cidade)
+    estado = normalizar_estado(estado)
+    carga = normalizar(carga)
+ 
+    # Verificar se a placa já existe
+ 
+    placa_existe = False
+ 
+    for caminhao in frota:
+ 
+        if caminhao["placa"] == placa:
+            placa_existe = True
+            break
+ 
+    if placa_existe:
+        print("\nEssa placa já está cadastrada!")
+        return
+ 
+    # Criar caminhão
+ 
+    caminhao = {
+        "placa": placa,
+        "modelo": modelo,
+        "motorista": motorista,
+        "cidade": cidade,
+        "estado": estado,
+        "carga": carga,
+        "ano": ano
+    }
+ 
+    frota.append(caminhao)
+ 
+    print("Caminhão cadastrado com sucesso!")
+ 
+ 
+# ==========================================
+# LISTAR CAMINHÕES
+# ==========================================
+ 
+def listar_caminhoes():
+ 
+    print("\n========== LISTA DE CAMINHÕES ==========")
+ 
+    if len(frota) == 0:
+ 
+        print("Nenhum caminhão cadastrado.")
+        return
+ 
+    for numero in range(len(frota)):
+ 
+        caminhao = frota[numero]
+ 
+        print("\n-----------------------------------")
+        print("Caminhão", numero + 1)
+        print("Placa:", caminhao["placa"])
+        print("Modelo:", caminhao["modelo"])
+        print("Motorista:", caminhao["motorista"])
+        print("Cidade:", caminhao["cidade"])
+        print("Estado:", caminhao["estado"])
+        print("Carga:", caminhao["carga"])
+        print("Ano:", caminhao["ano"])
+ 
+ 
+# ==========================================
+# PROCURAR POR PLACA
+# ==========================================
+ 
+def procurar_placa():
+ 
+    print("\n========== PESQUISAR POR PLACA ==========")
+ 
+    placa = input("Digite a placa: ")
+    placa = normalizar(placa)
+ 
+    encontrou = False
+ 
+    for caminhao in frota:
+ 
+        if caminhao["placa"] == placa:
+ 
+            print("\nCaminhão encontrado!")
+            print("Placa:", caminhao["placa"])
+            print("Modelo:", caminhao["modelo"])
+            print("Motorista:", caminhao["motorista"])
+            print("Cidade:", caminhao["cidade"])
+            print("Estado:", caminhao["estado"])
+            print("Carga:", caminhao["carga"])
+            print("Ano:", caminhao["ano"])
+ 
+            encontrou = True
+            break
+ 
+    if not encontrou:
+        print("\nCaminhão não encontrado.")
+ 
+ 
+# ==========================================
+# PROCURAR POR MOTORISTA
+# ==========================================
+ 
+def procurar_motorista():
+ 
+    print("\n========== PESQUISAR POR MOTORISTA ==========")
+ 
+    motorista = input("Digite o nome do motorista: ")
+    motorista = normalizar(motorista)
+ 
+    encontrou = False
+ 
+    for caminhao in frota:
+ 
+        motorista_cadastrado = normalizar(caminhao["motorista"])
+ 
+        if motorista_cadastrado == motorista:
+ 
+            print("\nCaminhão encontrado!")
+            print("Placa:", caminhao["placa"])
+            print("Modelo:", caminhao["modelo"])
+            print("Motorista:", caminhao["motorista"])
+            print("Cidade:", caminhao["cidade"])
+            print("Estado:", caminhao["estado"])
+            print("Carga:", caminhao["carga"])
+            print("Ano:", caminhao["ano"])
+ 
+            encontrou = True
+ 
+    if not encontrou:
+        print("\nNenhum caminhão encontrado para esse motorista.")
+ 
+ 
+# ==========================================
+# PROCURAR POR CIDADE
+# ==========================================
+ 
+def procurar_cidade():
+ 
+    print("\n========== PESQUISAR POR CIDADE ==========")
+ 
+    cidade = input("Digite a cidade: ")
+    cidade = normalizar(cidade)
+ 
+    encontrou = False
+ 
+    for caminhao in frota:
+ 
+        cidade_cadastrada = normalizar(caminhao["cidade"])
+ 
+        if cidade_cadastrada == cidade:
+ 
+            print("\nCaminhão encontrado!")
+            print("Placa:", caminhao["placa"])
+            print("Modelo:", caminhao["modelo"])
+            print("Motorista:", caminhao["motorista"])
+            print("Cidade:", caminhao["cidade"])
+            print("Estado:", caminhao["estado"])
+            print("Carga:", caminhao["carga"])
+            print("Ano:", caminhao["ano"])
+ 
+            encontrou = True
+ 
+    if not encontrou:
+        print("\nNenhum caminhão encontrado nessa cidade.")
+ 
+ 
+# ==========================================
+# PROCURAR POR ESTADO
+# ==========================================
+ 
+def procurar_estado():
+ 
+    print("\n========== PESQUISAR POR ESTADO ==========")
+ 
+    estado = input("Digite o estado: ")
+    estado = normalizar_estado(estado)
+ 
+    encontrou = False
+ 
+    for caminhao in frota:
+ 
+        if caminhao["estado"] == estado:
+ 
+            print("\nCaminhão encontrado!")
+            print("Placa:", caminhao["placa"])
+            print("Modelo:", caminhao["modelo"])
+            print("Motorista:", caminhao["motorista"])
+            print("Cidade:", caminhao["cidade"])
+            print("Estado:", caminhao["estado"])
+            print("Carga:", caminhao["carga"])
+            print("Ano:", caminhao["ano"])
+ 
+            encontrou = True
+ 
+    if not encontrou:
+        print("\nNenhum caminhão encontrado nesse estado.")
+ 
+ 
+# ==========================================
+# PROCURAR POR CARGA
+# ==========================================
+ 
+def procurar_carga():
+ 
+    print("\n========== PESQUISAR POR CARGA ==========")
+ 
+    carga = input("Digite o tipo de carga: ")
+    carga = normalizar(carga)
+ 
+    encontrou = False
+ 
+    for caminhao in frota:
+ 
+        carga_cadastrada = normalizar(caminhao["carga"])
+ 
+        if carga_cadastrada == carga:
+ 
+            print("\nCaminhão encontrado!")
+            print("Placa:", caminhao["placa"])
+            print("Modelo:", caminhao["modelo"])
+            print("Motorista:", caminhao["motorista"])
+            print("Cidade:", caminhao["cidade"])
+            print("Estado:", caminhao["estado"])
+            print("Carga:", caminhao["carga"])
+            print("Ano:", caminhao["ano"])
+ 
+            encontrou = True
+ 
+    if not encontrou:
+        print("\nNenhum caminhão encontrado para essa carga.")
+ 
+ 
+# ==========================================
+# ALTERAR CAMINHÃO
+# ==========================================
+ 
+def alterar_caminhao():
+ 
+    print("\n========== ALTERAR CAMINHÃO ==========")
+ 
+    placa = input("Digite a placa do caminhão: ")
+    placa = normalizar(placa)
+ 
+    caminhao_encontrado = None
+ 
+    for caminhao in frota:
+ 
+        if caminhao["placa"] == placa:
+            caminhao_encontrado = caminhao
+            break
+ 
+    if caminhao_encontrado is None:
+ 
+        print("\nCaminhão não encontrado.")
+        return
+ 
+    print("\nCaminhão encontrado!")
+ 
+    print("Deixe vazio caso não queira alterar o campo.")
+ 
+    modelo = input("Novo modelo: ")
+    motorista = input("Novo motorista: ")
+    cidade = input("Nova cidade: ")
+    estado = input("Novo estado: ")
+    carga = input("Nova carga: ")
+ 
+    print("\nDigite o novo ano.")
+    print("Se não quiser alterar, deixe vazio.")
+ 
+    # ==========================================
+    # TRATAMENTO DO ANO NA ALTERAÇÃO
+    # ==========================================
+ 
+    while True:
+ 
+        novo_ano = input("Novo ano: ")
+ 
+        if novo_ano == "":
+            break
+ 
+        try:
+ 
+            novo_ano = int(novo_ano)
+ 
+            if novo_ano <= 0:
+                print("Digite um ano válido!")
+ 
+            else:
+                caminhao_encontrado["ano"] = novo_ano
+                break
+ 
+        except ValueError:
+ 
+            print("Digite apenas números para o ano!")
+ 
+    # Alterar os campos de texto
+ 
+    if modelo != "":
+        caminhao_encontrado["modelo"] = normalizar(modelo)
+ 
+    if motorista != "":
+        caminhao_encontrado["motorista"] = normalizar(motorista)
+ 
+    if cidade != "":
+        caminhao_encontrado["cidade"] = normalizar(cidade)
+ 
+    if estado != "":
+        caminhao_encontrado["estado"] = normalizar_estado(estado)
+ 
+    if carga != "":
+        caminhao_encontrado["carga"] = normalizar(carga)
+ 
+    print("\nCaminhão alterado com sucesso!")
+ 
+ 
+# ==========================================
+# REMOVER CAMINHÃO
+# ==========================================
+ 
+def remover_caminhao():
+ 
+    print("\n========== REMOVER CAMINHÃO ==========")
+ 
+    placa = input("Digite a placa do caminhão: ")
+    placa = normalizar(placa)
+ 
+    caminhao_encontrado = None
+ 
+    for caminhao in frota:
+ 
+        if caminhao["placa"] == placa:
+ 
+            caminhao_encontrado = caminhao
+            break
+ 
+    if caminhao_encontrado is None:
+ 
+        print("\nCaminhão não encontrado.")
+        return
+ 
+    print("\nCaminhão encontrado!")
+    print("Placa:", caminhao_encontrado["placa"])
+    print("Modelo:", caminhao_encontrado["modelo"])
+    print("Motorista:", caminhao_encontrado["motorista"])
+ 
+    confirmacao = input("\nDeseja realmente remover? (S/N): ")
+    confirmacao = normalizar(confirmacao)
+ 
+    if confirmacao == "s":
+ 
+        frota.remove(caminhao_encontrado)
+ 
+        print("\nCaminhão removido com sucesso!")
+ 
+    else:
+ 
+        print("\nOperação cancelada.")
+ 
+ 
+# ==========================================
+# ESTATÍSTICAS
+# ==========================================
+ 
+def estatisticas():
+ 
+    print("\n========== ESTATÍSTICAS ==========")
+ 
+    total = len(frota)
+ 
+    if total == 0:
+ 
+        print("Nenhum caminhão cadastrado.")
+        return
+ 
+    quantidade_sp = 0
+    quantidade_pr = 0
+    quantidade_mg = 0
+    quantidade_rj = 0
+    outros = 0
+ 
+    for caminhao in frota:
+ 
+        estado = caminhao["estado"]
+ 
+        if estado == "SP":
+ 
+            quantidade_sp += 1
+ 
+        elif estado == "PR":
+ 
+            quantidade_pr += 1
+ 
+        elif estado == "MG":
+ 
+            quantidade_mg += 1
+ 
+        elif estado == "RJ":
+ 
+            quantidade_rj += 1
+ 
+        else:
+ 
+            outros += 1
+ 
+    print("Total de caminhões:", total)
+    print("São Paulo:", quantidade_sp)
+    print("Paraná:", quantidade_pr)
+    print("Minas Gerais:", quantidade_mg)
+    print("Rio de Janeiro:", quantidade_rj)
+    print("Outros estados:", outros)
+ 
+ 
+# ==========================================
+# MENU
+# ==========================================
+ 
+def menu():
+ 
+    print("\n======================================")
+    print("       🚛 SISTEMA DE CONTROLE DE FROTA")
+    print("======================================")
+ 
+    print("1 - Cadastrar caminhão")
+    print("2 - Listar caminhões")
+    print("3 - Pesquisar por placa")
+    print("4 - Pesquisar por motorista")
+    print("5 - Pesquisar por cidade")
+    print("6 - Pesquisar por estado")
+    print("7 - Pesquisar por carga")
+    print("8 - Alterar caminhão")
+    print("9 - Remover caminhão")
+    print("10 - Estatísticas")
+    print("0 - Sair")
+ 
